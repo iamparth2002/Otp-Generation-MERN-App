@@ -14,16 +14,16 @@ const sidebarItems = [
     icon: LayoutDashboard,
     href: "/dashboard",
   },
-  {
-    title: "OTP Operator1",
-    icon: Smartphone,
-    href: "/operator1",
-  },
-  {
-    title: "Top up balance",
-    icon: Zap,
-    href: "/topup",
-  },
+  // {
+  //   title: "OTP Operator",
+  //   icon: Smartphone,
+  //   href: "/operator1",
+  // },
+  // {
+  //   title: "Top up balance",
+  //   icon: Zap,
+  //   href: "/topup",
+  // },
   {
     title: "Activation",
     icon: MessageSquare,
@@ -69,7 +69,7 @@ export function Sidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex flex-col w-64 bg-white border-r min-h-[calc(100vh-4rem)] p-4">
+      <div className="hidden md:flex flex-col w-64 bg-white min-h-screen border-r p-4">
         <NavLinks />
       </div>
 

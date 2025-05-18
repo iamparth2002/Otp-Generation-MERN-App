@@ -4,41 +4,13 @@ import { useState } from "react"
 import { Copy, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useOtpContext } from "@/contexts/OtpContext"
 
-const otpHistory = [
-  {
-    date: "1/2/2025 : 20:51:57",
-    service: "Wondermart",
-    price: 6,
-    mobile: "+918199971099",
-    status: "pending",
-    otp: "",
-    left: "25:12",
-  },
-  {
-    date: "27/1/2025 : 18:9:51",
-    service: "Instagram",
-    price: 7,
-    mobile: "+917890617835",
-    status: "failed",
-    otp: "",
-    left: "",
-  },
-  {
-    date: "23/1/2025 : 21:18:46",
-    service: "Telegram",
-    price: 25,
-    mobile: "+919110033488",
-    status: "failed",
-    otp: "",
-    left: "",
-  },
-  // Add more history items as needed
-]
+
 
 export default function ActivationPage() {
   const [timeFilter, setTimeFilter] = useState("all")
-
+    const {otpHistory,cancelOtpTransaction } = useOtpContext();
   return (
     <div className="mx-auto space-y-6">
       <div>
@@ -104,7 +76,7 @@ export default function ActivationPage() {
                 <td className="px-4 py-3 text-sm">{item.left}</td>
                 <td className="px-4 py-3 text-sm">
                   {item.status === "pending" && (
-                    <Button variant="destructive" size="sm" className="bg-rose-500 hover:bg-rose-600">
+                    <Button variant="destructive" size="sm" className="bg-rose-500 hover:bg-rose-600" onClick={()=>cancelOtpTransaction(item.id)}>
                       Cancel
                     </Button>
                   )}

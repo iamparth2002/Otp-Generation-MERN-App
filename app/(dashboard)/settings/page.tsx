@@ -46,8 +46,6 @@ export default function SettingsPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="operator1">OTP Operator 1</SelectItem>
-                <SelectItem value="operator2">OTP Operator 2</SelectItem>
-                <SelectItem value="operator3">OTP Operator 3</SelectItem>
               </SelectContent>
             </Select>
             <Button className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700">
