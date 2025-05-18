@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { useOtpContext } from "@/contexts/OtpContext"
+import { useToast } from "@/hooks/use-toast"
+
 
 const services = [
   { name: "WhatsApp", value: "whatsapp", price: 10 },
@@ -19,9 +21,11 @@ export default function DashboardPage() {
   const [submitted, setSubmitted] = useState(false)
   const [mobileNumber, setMobileNumber] = useState<string>("")
   const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
+
 
   const router = useRouter()
-  const { setOtpHistory, setAmount } = useOtpContext()
+  const { setOtpHistory, setAmount, amount } = useOtpContext()
 
   const generateRandomMobile = () => {
     return "9" + Math.floor(100000000 + Math.random() * 900000000).toString()
@@ -32,10 +36,22 @@ export default function DashboardPage() {
   }
 
   const handleSubmit = () => {
-    if (selectedService) {
-      setMobileNumber(generateRandomMobile())
-      setSubmitted(true)
+    const serviceDetails = services.find(service => service.value === selectedService)
+
+    if (!serviceDetails) return
+
+    if (amount < serviceDetails.price) {
+      toast({
+        title: "Not Enough Balance",
+        description: `You don't have enough amount to use this service.`,
+        variant: "destructive",
+      })
+      return
     }
+
+    setMobileNumber(generateRandomMobile())
+    setSubmitted(true)
+
   }
 
   const handleGenerateOTP = () => {
@@ -51,11 +67,12 @@ export default function DashboardPage() {
         service: serviceDetails.name,
         price: serviceDetails.price,
         mobile: `+91${mobileNumber}`,
-        status: "pending",
+        status: "pending" as const, // type-safe assignment
         otp: generateRandomOtp(),
         left: "25:12",
         expired: false,
       }
+
       setAmount(prev => prev - serviceDetails.price)
       setOtpHistory(prev => [newOtpEntry, ...prev])
       setLoading(false)

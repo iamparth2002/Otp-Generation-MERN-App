@@ -29,7 +29,7 @@ const OtpContext = createContext<OtpContextType | undefined>(undefined)
 
 export const OtpProvider = ({ children }: { children: ReactNode }) => {
   const [otpHistory, setOtpHistory] = useState<OtpItem[]>(initialHistory)
-  const [amount, setAmount] = useState<number>(1000)
+  const [amount, setAmount] = useState<number>(0)
 
   const cancelOtpTransaction = (id: number) => {
     setOtpHistory(prev =>

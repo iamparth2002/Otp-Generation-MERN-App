@@ -6,12 +6,10 @@ import { Menu, Wallet, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { WalletDialog } from "./wallet-dialog"
-import { useOtpContext } from "@/contexts/OtpContext"
 
 export function TopNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [open, setOpen] = useState(false)
-    const { amount } = useOtpContext();
 
 
   return (

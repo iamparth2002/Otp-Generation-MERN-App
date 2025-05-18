@@ -2,7 +2,13 @@
 
 import { useState } from "react"
 import { CreditCard } from "lucide-react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,6 +17,34 @@ interface RechargeDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess: (amount: number) => void
+}
+
+// Extend window interface to include Razorpay
+declare global {
+  interface Window {
+    Razorpay: new (options: RazorpayOptions) => RazorpayInstance
+  }
+}
+
+interface RazorpayOptions {
+  key: string
+  amount: number
+  currency: string
+  name: string
+  description: string
+  handler: () => void
+  prefill?: {
+    name?: string
+    email?: string
+    contact?: string
+  }
+  theme?: {
+    color?: string
+  }
+}
+
+interface RazorpayInstance {
+  open: () => void
 }
 
 export function RechargeDialog({ open, onOpenChange, onSuccess }: RechargeDialogProps) {
@@ -24,10 +58,9 @@ export function RechargeDialog({ open, onOpenChange, onSuccess }: RechargeDialog
       // Load Razorpay script
       await loadRazorpayScript()
 
-      // Create a new Razorpay instance
-      const options = {
-        key: "rzp_test_3qT2gS8f6XgYVr", // Replace with your test key
-        amount: amount * 100, // Razorpay takes amount in paise
+      const options: RazorpayOptions = {
+        key: "rzp_test_3qT2gS8f6XgYVr",
+        amount: amount * 100,
         currency: "INR",
         name: "MyApp",
         description: "Wallet Recharge",
@@ -41,11 +74,11 @@ export function RechargeDialog({ open, onOpenChange, onSuccess }: RechargeDialog
           contact: "9999999999",
         },
         theme: {
-          color: "#DC2626", // Red color matching the theme
+          color: "#DC2626",
         },
       }
 
-      const razorpay = new (window as any).Razorpay(options)
+      const razorpay = new window.Razorpay(options)
       razorpay.open()
     } catch (error) {
       console.error("Payment failed:", error)
@@ -54,10 +87,10 @@ export function RechargeDialog({ open, onOpenChange, onSuccess }: RechargeDialog
   }
 
   const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       const script = document.createElement("script")
       script.src = "https://checkout.razorpay.com/v1/checkout.js"
-      script.onload = resolve
+      script.onload = () => resolve()
       document.body.appendChild(script)
     })
   }
@@ -70,7 +103,9 @@ export function RechargeDialog({ open, onOpenChange, onSuccess }: RechargeDialog
             <CreditCard className="h-5 w-5 text-primary" />
             Recharge Wallet
           </DialogTitle>
-          <DialogDescription>Enter the amount you want to add to your wallet.</DialogDescription>
+          <DialogDescription>
+            Enter the amount you want to add to your wallet.
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-6 py-4">
           <div className="space-y-2">
@@ -91,7 +126,9 @@ export function RechargeDialog({ open, onOpenChange, onSuccess }: RechargeDialog
                 key={value}
                 type="button"
                 variant="outline"
-                className={`border-primary/20 ${amount === value ? "bg-primary/10 border-primary/30" : ""}`}
+                className={`border-primary/20 ${
+                  amount === value ? "bg-primary/10 border-primary/30" : ""
+                }`}
                 onClick={() => setAmount(value)}
               >
                 ₹{value}
@@ -99,11 +136,17 @@ export function RechargeDialog({ open, onOpenChange, onSuccess }: RechargeDialog
             ))}
           </div>
 
-          <Button className="w-full" onClick={handleRecharge} disabled={loading || amount <= 0}>
+          <Button
+            className="w-full"
+            onClick={handleRecharge}
+            disabled={loading || amount <= 0}
+          >
             {loading ? "Processing..." : "Proceed to Pay"}
           </Button>
 
-          <p className="text-xs text-center text-muted-foreground">Powered by Razorpay (Test Mode)</p>
+          <p className="text-xs text-center text-muted-foreground">
+            Powered by Razorpay (Test Mode)
+          </p>
         </div>
       </DialogContent>
     </Dialog>

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Smartphone, Zap, MessageSquare, LifeBuoy, Settings, Menu, X } from "lucide-react"
+import { LayoutDashboard, MessageSquare, LifeBuoy, Settings, Menu, X } from "lucide-react"
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
